@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { StyleSheet } from "react-native";
 import { ViroARScene, ViroText } from "@reactvision/react-viro";
 import AutoPlaneScene from "./AutoPlaneScene";
@@ -15,8 +15,17 @@ const OpeningScene = (props: OpeningSceneProps = {}) => {
     props.sceneNavigator.push({ scene });
   };
 
+  const ref = useRef<ViroARScene>(null);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      ref.current?.performARHitTestWithPoint(1, 1).then(console.error);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <ViroARScene>
+    <ViroARScene ref={ref}>
       <ViroText
         text="Auto Plane"
         scale={[0.5, 0.5, 0.5]}
